@@ -1,4 +1,4 @@
-# Defer railed operations (http requests, grpc requests)
+# Defer failed operations (http requests, grpc requests)
 
 This package provides simple interface to defer failed operations.
 
