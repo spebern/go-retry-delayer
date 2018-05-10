@@ -71,6 +71,20 @@ func (delayer *delayer) Replace(id string, content interface{}) {
 	delayer.msgGroupsMu.RUnlock()
 }
 
+func (delayer *delayer) ReplaceOrDelay(id string, content interface{}) {
+	delayer.msgGroupsMu.RLock()
+	for e := delayer.msgGroups.Back(); e != nil; e = e.Prev() {
+		store := e.Value.(msgGroup).store
+		if store.Has(id) {
+			store.Set(id, msg{id: id, content: content})
+			delayer.msgGroupsMu.RUnlock()
+			return
+		}
+	}
+	delayer.msgGroupsMu.RUnlock()
+	delayer.Delay(id, content)
+}
+
 func (delayer *delayer) Delay(id string, content interface{}) {
 	ts := time.Now()
 	msg := msg{id: id, content: content}

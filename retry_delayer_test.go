@@ -48,6 +48,18 @@ func TestReplace(t *testing.T) {
 	if !exists || v.(msg).content.(int) != 2 {
 		t.Error("replace msg failed")
 	}
+
+	delayer.ReplaceOrDelay("321", 3)
+	v, exists = store1.Get("321")
+	if !exists || v.(msg).content.(int) != 3 {
+		t.Error("replace or delay msg failed (delay)")
+	}
+
+	delayer.ReplaceOrDelay("321", 4)
+	v, exists = store1.Get("321")
+	if !exists || v.(msg).content.(int) != 4 {
+		t.Error("replace or dealy msg failed (replace)")
+	}
 }
 
 func TestDelay(t *testing.T) {
