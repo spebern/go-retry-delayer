@@ -59,12 +59,12 @@ func (delayer *delayer) Remove(id string) {
 	delayer.msgGroupsMu.RUnlock()
 }
 
-func (delayer *delayer) Replace(id string, msg interface{}) {
+func (delayer *delayer) Replace(id string, content interface{}) {
 	delayer.msgGroupsMu.RLock()
 	for e := delayer.msgGroups.Back(); e != nil; e = e.Prev() {
 		store := e.Value.(msgGroup).store
 		if store.Has(id) {
-			store.Set(id, msg)
+			store.Set(id, msg{id: id, content: content})
 			break
 		}
 	}

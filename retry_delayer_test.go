@@ -30,21 +30,22 @@ func TestRemove(t *testing.T) {
 
 func TestReplace(t *testing.T) {
 	msgGroups := list.New()
+	store1 := cmap.New()
 	msgGroups.PushFront(msgGroup{
 		until: time.Now().Add(60 * time.Second),
-		store: cmap.New()})
+		store: store1})
 
-	store := cmap.New()
-	store.Set("123", 1)
+	store2 := cmap.New()
+	store2.Set("123", 1)
 	msgGroups.PushFront(msgGroup{
 		until: time.Now().Add(30 * time.Second),
-		store: store})
+		store: store2})
 
 	delayer := &delayer{msgGroups: msgGroups}
 	delayer.Replace("123", 2)
 
-	v, exists := store.Get("123")
-	if !exists || v.(int) != 2 {
+	v, exists := store2.Get("123")
+	if !exists || v.(msg).content.(int) != 2 {
 		t.Error("replace msg failed")
 	}
 }
