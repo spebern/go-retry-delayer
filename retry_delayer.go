@@ -13,6 +13,7 @@ type RetryDelayer interface {
 	Delay(string, interface{})
 	Remove(id string)
 	Replace(id string, msg interface{})
+	ReplaceOrDelay(id string, msg interface{})
 	Stop()
 }
 
